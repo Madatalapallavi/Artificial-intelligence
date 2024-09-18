@@ -1,0 +1,54 @@
+class MapColoring:
+    def __init__(self, graph, colors):
+        self.graph = graph  # Adjacency list representation of the graph
+        self.colors = colors  # List of colors to use
+        self.color_assignment = {node: None for node in graph}  # Initial color assignment
+
+    def is_safe(self, node, color):
+        # Check if the color can be assigned to the node
+        for neighbor in self.graph[node]:
+            if self.color_assignment[neighbor] == color:
+                return False
+        return True
+
+    def solve(self):
+        if self.backtrack():
+            return self.color_assignment
+        else:
+            return None  # No solution found
+
+    def backtrack(self):
+        # Find the first uncolored node
+        for node in self.graph:
+            if self.color_assignment[node] is None:
+                for color in self.colors:
+                    if self.is_safe(node, color):
+                        self.color_assignment[node] = color  # Assign color
+                        if self.backtrack():
+                            return True  # If successful, return
+                        self.color_assignment[node] = None  # Backtrack
+                return False  # No color could be assigned
+        return True  # All nodes are colored
+
+# Example usage
+if __name__ == "__main__":
+    # Graph represented as an adjacency list
+    graph = {
+        'A': ['B', 'C'],
+        'B': ['A', 'D', 'E'],
+        'C': ['A', 'F'],
+        'D': ['B'],
+        'E': ['B', 'F'],
+        'F': ['C', 'E']
+    }
+    
+    # Colors available
+    colors = ['Red', 'Green', 'Blue']
+
+    map_coloring = MapColoring(graph, colors)
+    result = map_coloring.solve()
+
+    if result:
+        print("Color assignment:", result)
+    else:
+        print("No solution found.")
