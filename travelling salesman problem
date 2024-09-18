@@ -1,0 +1,29 @@
+import itertools
+
+def calculate_distance(city1, city2):
+    # Example distance function (Euclidean distance)
+    return ((city1[0] - city2[0]) ** 2 + (city1[1] - city2[1]) ** 2) ** 0.5
+
+def total_distance(route):
+    return sum(calculate_distance(route[i], route[i + 1]) for i in range(len(route) - 1)) + calculate_distance(route[-1], route[0])
+
+def tsp_brute_force(cities):
+    shortest_route = None
+    min_distance = float('inf')
+
+    # Generate all permutations of the cities
+    for perm in itertools.permutations(cities):
+        current_distance = total_distance(perm)
+        if current_distance < min_distance:
+            min_distance = current_distance
+            shortest_route = perm
+
+    return shortest_route, min_distance
+
+# Example cities (coordinates)
+cities = [(0, 0), (1, 2), (3, 1), (5, 4)]
+
+shortest_route, min_distance = tsp_brute_force(cities)
+
+print("Shortest route:", shortest_route)
+print("Minimum distance:", min_distance)
