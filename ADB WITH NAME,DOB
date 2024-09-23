@@ -1,0 +1,41 @@
+import sqlite3
+from datetime import datetime
+
+# Connect to SQLite database (or create it if it doesn't exist)
+conn = sqlite3.connect('people.db')
+cursor = conn.cursor()
+
+# Create a table for names and DOBs
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS people (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    dob DATE NOT NULL
+)
+''')
+
+# Function to insert a record
+def insert_record(name, dob):
+    cursor.execute('''
+    INSERT INTO people (name, dob) VALUES (?, ?)
+    ''', (name, dob))
+    conn.commit()
+
+# Insert sample records
+insert_record('Alice', '1990-01-15')
+insert_record('Bob', '1985-05-23')
+insert_record('Charlie', '1992-11-30')
+
+# Function to retrieve and display records
+def display_records():
+    cursor.execute('SELECT * FROM people')
+    records = cursor.fetchall()
+    for record in records:
+        print(f"ID: {record[0]}, Name: {record[1]}, DOB: {record[2]}")
+
+# Display the records
+print("Records in the database:")
+display_records()
+
+# Close the connection
+conn.close()
