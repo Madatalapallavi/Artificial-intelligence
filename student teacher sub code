@@ -1,0 +1,67 @@
+class Subject:
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+
+class Teacher:
+    def __init__(self, name):
+        self.name = name
+        self.subjects = []
+
+    def assign_subject(self, subject):
+        self.subjects.append(subject)
+
+    def show_subjects(self):
+        return [str(subject) for subject in self.subjects]
+
+    def __str__(self):
+        return self.name
+
+
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.subjects = []
+
+    def enroll_subject(self, subject):
+        self.subjects.append(subject)
+
+    def show_subjects(self):
+        return [str(subject) for subject in self.subjects]
+
+    def __str__(self):
+        return self.name
+
+
+# Example usage
+
+# Create subjects
+math = Subject("Mathematics")
+science = Subject("Science")
+english = Subject("English")
+
+# Create a teacher
+teacher = Teacher("Mr. Smith")
+teacher.assign_subject(math)
+teacher.assign_subject(science)
+
+# Create students
+student1 = Student("Alice")
+student1.enroll_subject(math)
+student1.enroll_subject(english)
+
+student2 = Student("Bob")
+student2.enroll_subject(science)
+
+# Display information
+print(f"Teacher: {teacher}")
+print(f"Subjects taught by {teacher}: {teacher.show_subjects()}")
+
+print(f"\nStudent: {student1}")
+print(f"Subjects enrolled by {student1}: {student1.show_subjects()}")
+
+print(f"\nStudent: {student2}")
+print(f"Subjects enrolled by {student2}: {student2.show_subjects()}")
