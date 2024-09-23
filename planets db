@@ -1,0 +1,46 @@
+import sqlite3
+
+# Connect to SQLite database (or create it if it doesn't exist)
+conn = sqlite3.connect('planets.db')
+cursor = conn.cursor()
+
+# Create a table for planets
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS planets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    diameter REAL NOT NULL,
+    distance_from_sun REAL NOT NULL
+)
+''')
+
+# Function to insert a planet record
+def insert_planet(name, diameter, distance_from_sun):
+    cursor.execute('''
+    INSERT INTO planets (name, diameter, distance_from_sun) VALUES (?, ?, ?)
+    ''', (name, diameter, distance_from_sun))
+    conn.commit()
+
+# Insert sample planet records
+insert_planet('Mercury', 4879.4, 57.91)
+insert_planet('Venus', 12104, 108.2)
+insert_planet('Earth', 12756, 149.6)
+insert_planet('Mars', 6792, 227.9)
+insert_planet('Jupiter', 142984, 778.5)
+insert_planet('Saturn', 120536, 1433.5)
+insert_planet('Uranus', 51118, 2872.5)
+insert_planet('Neptune', 49528, 4495.1)
+
+# Function to retrieve and display planet records
+def display_planets():
+    cursor.execute('SELECT * FROM planets')
+    records = cursor.fetchall()
+    for record in records:
+        print(f"ID: {record[0]}, Name: {record[1]}, Diameter: {record[2]} km, Distance from Sun: {record[3]} million km")
+
+# Display the planets
+print("Planets in the database:")
+display_planets()
+
+# Close the connection
+conn.close()
