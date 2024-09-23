@@ -1,0 +1,57 @@
+class MapColoringCSP:
+    def __init__(self, regions, adjacency_list, colors):
+        self.regions = regions
+        self.adjacency_list = adjacency_list
+        self.colors = colors
+        self.assignments = {}
+
+    def is_consistent(self, region, color):
+        for neighbor in self.adjacency_list[region]:
+            if neighbor in self.assignments and self.assignments[neighbor] == color:
+                return False
+        return True
+
+    def backtrack(self):
+        if len(self.assignments) == len(self.regions):
+            return self.assignments.copy()
+
+        region = self.select_unassigned_region()
+        for color in self.colors:
+            if self.is_consistent(region, color):
+                self.assignments[region] = color
+                result = self.backtrack()
+                if result:
+                    return result
+                del self.assignments[region]  # backtrack
+        return None
+
+    def select_unassigned_region(self):
+        for region in self.regions:
+            if region not in self.assignments:
+                return region
+        return None
+
+    def solve(self):
+        return self.backtrack()
+
+
+if __name__ == "__main__":
+    # Define regions and adjacency list
+    regions = ['A', 'B', 'C', 'D']
+    adjacency_list = {
+        'A': ['B', 'C'],
+        'B': ['A', 'D'],
+        'C': ['A', 'D'],
+        'D': ['B', 'C']
+    }
+    colors = ['Red', 'Green', 'Blue', 'Yellow']
+
+    csp = MapColoringCSP(regions, adjacency_list, colors)
+    solution = csp.solve()
+
+    if solution:
+        print("Solution found:")
+        for region, color in solution.items():
+            print(f"Region {region} -> Color {color}")
+    else:
+        print("No solution exists.")
